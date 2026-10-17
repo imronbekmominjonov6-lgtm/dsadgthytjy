@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Do'kon kassa</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- Birinchi sozlash -->
+<section id="view-setup" class="auth hidden">
+  <form id="setup-form" class="auth-card">
+    <select class="lang-sel"><option value="uz">O'zbekcha</option><option value="ru">Русский</option><option value="en">English</option></select>
+    <h1 data-i18n="setup_title"></h1>
+    <p class="mute" data-i18n="setup_hint"></p>
+    <input id="s-branch" data-i18n-ph="branch_name" required>
+    <input id="s-fullname" data-i18n-ph="full_name" required>
+    <input id="s-user" data-i18n-ph="username" required autocomplete="username">
+    <input id="s-pass" type="password" data-i18n-ph="password" required minlength="4" autocomplete="new-password">
+    <button class="primary" data-i18n="create"></button>
+  </form>
+</section>
+
+<!-- Kirish -->
+<section id="view-login" class="auth hidden">
+  <form id="login-form" class="auth-card">
+    <select class="lang-sel"><option value="uz">O'zbekcha</option><option value="ru">Русский</option><option value="en">English</option></select>
+    <h1>🛒 <span data-i18n="app_title"></span></h1>
+    <input id="l-user" data-i18n-ph="username" required autocomplete="username">
+    <input id="l-pass" type="password" data-i18n-ph="password" required autocomplete="current-password">
+    <button class="primary" data-i18n="login"></button>
+  </form>
+</section>
+
+<!-- Ilova -->
+<div id="view-app" class="hidden">
+<header>
+  <h1>🛒 <span data-i18n="app_title"></span></h1>
+  <nav>
+    <button class="tab active" data-tab="kassa" data-i18n="tab_kassa"></button>
+    <button class="tab" data-tab="products" data-i18n="tab_products"></button>
+    <button class="tab admin-only" data-tab="intake" data-i18n="tab_intake"></button>
+    <button class="tab" data-tab="report" data-i18n="tab_report"></button>
+    <button class="tab admin-only" data-tab="settings" data-i18n="tab_settings"></button>
+  </nav>
+  <div class="hright">
+    <select id="branch" class="admin-only"></select>
+    <select class="lang-sel"><option value="uz">O'zbekcha</option><option value="ru">Русский</option><option value="en">English</option></select>
+    <span id="who" class="mute"></span>
+    <button id="logout" class="ghost" data-i18n="logout"></button>
+  </div>
+</header>
+
+<!-- KASSA -->
+<main id="tab-kassa" class="panel">
+  <section class="left">
+    <div class="scanrow">
+      <input id="scan" type="text" data-i18n-ph="scan_ph" autocomplete="off">
+      <button id="cam-btn" class="ghost" type="button" title="Camera">📷</button>
+    </div>
+    <div id="cats" class="chips"></div>
+    <div id="quick-wrap"><h3 data-i18n="quick"></h3><div id="quick" class="grid"></div></div>
+    <div id="results" class="grid hidden"></div>
+  </section>
+  <aside class="cart">
+    <h2 data-i18n="cart"></h2>
+    <div id="cart-items"></div>
+    <div class="total"><span data-i18n="total"></span>: <b id="cart-total">0</b></div>
+    <div class="pay">
+      <div class="seg">
+        <button id="m-cash" class="on" data-i18n="cash"></button>
+        <button id="m-card" data-i18n="card"></button>
+      </div>
+      <input id="paid" type="number" min="0" data-i18n-ph="paid_ph">
+      <div id="change" class="change"></div>
+      <button id="sell" class="primary" data-i18n="sell"></button>
+      <button id="clear" class="ghost" data-i18n="clear"></button>
+    </div>
+  </aside>
+</main>
+
+<!-- MAHSULOTLAR -->
+<main id="tab-products" class="panel col hidden">
+  <form id="pform" class="form admin-only">
+    <input type="hidden" id="p-id">
+    <label class="f"><span data-i18n="p_name"></span><input id="p-name" required></label>
+    <label class="f"><span data-i18n="p_barcode"></span><input id="p-barcode"></label>
+    <label class="f"><span data-i18n="p_cat"></span><select id="p-cat"></select></label>
+    <label class="f"><span data-i18n="p_unit"></span><select id="p-unit"></select></label>
+    <label class="f"><span data-i18n="p_price"></span><input id="p-price" type="number" min="0" step="1" required></label>
+    <label class="f"><span data-i18n="p_cost"></span><input id="p-cost" type="number" min="0" step="1"></label>
+    <label class="f"><span data-i18n="p_min"></span><input id="p-min" type="number" min="0" step="any"></label>
+    <label class="f" id="p-stock-wrap"><span data-i18n="p_stock"></span><input id="p-stock" type="number" min="0" step="any"></label>
+    <label class="chk"><input type="checkbox" id="p-quick"> <span data-i18n="quick_btn"></span> ⭐</label>
+    <div class="row">
+      <button class="primary" type="submit" data-i18n="save"></button>
+      <button class="ghost" type="button" id="p-reset" data-i18n="cancel"></button>
+    </div>
+  </form>
+  <input id="p-search" data-i18n-ph="search">
+  <table>
+    <thead><tr>
+      <th data-i18n="p_name"></th><th data-i18n="p_cat"></th><th data-i18n="p_unit"></th>
+      <th class="r" data-i18n="p_price"></th><th class="r admin-only" data-i18n="p_cost"></th>
+      <th class="r" data-i18n="stock"></th><th data-i18n="p_barcode"></th><th></th>
+    </tr></thead>
+    <tbody id="p-body"></tbody>
+  </table>
+</main>
+
+<!-- KIRIM -->
+<main id="tab-intake" class="panel col hidden">
+  <div id="low-box" class="card warnbox hidden"><h3 data-i18n="low_stock"></h3><div id="low-list"></div></div>
+  <input id="i-scan" data-i18n-ph="i_scan_ph" autocomplete="off">
+  <div id="i-results" class="grid"></div>
+  <table>
+    <thead><tr><th data-i18n="product"></th><th data-i18n="p_unit"></th><th data-i18n="qty"></th><th data-i18n="p_cost"></th><th class="r" data-i18n="sum"></th><th></th></tr></thead>
+    <tbody id="i-body"></tbody>
+  </table>
+  <div class="row between">
+    <input id="i-note" data-i18n-ph="note">
+    <b id="i-total"></b>
+    <button id="i-save" class="primary" data-i18n="i_save"></button>
+  </div>
+  <h3 data-i18n="recent_intakes"></h3>
+  <table>
+    <thead><tr><th>№</th><th data-i18n="date"></th><th data-i18n="user"></th><th data-i18n="lines"></th><th class="r" data-i18n="sum"></th><th data-i18n="note"></th></tr></thead>
+    <tbody id="i-recent"></tbody>
+  </table>
+</main>
+
+<!-- HISOBOT -->
+<main id="tab-report" class="panel col hidden">
+  <div class="row">
+    <input type="date" id="r-date">
+    <select id="r-branch" class="admin-only"></select>
+    <button class="ghost" id="r-load" data-i18n="show"></button>
+  </div>
+  <div id="r-cards" class="cards"></div>
+  <h3 data-i18n="top_products"></h3>
+  <table><thead><tr><th data-i18n="product"></th><th class="r" data-i18n="qty"></th><th class="r" data-i18n="sum"></th></tr></thead><tbody id="r-top"></tbody></table>
+  <div class="admin-only">
+    <h3 data-i18n="by_cashier"></h3>
+    <table><thead><tr><th data-i18n="cashier"></th><th class="r" data-i18n="r_count"></th><th class="r" data-i18n="sum"></th></tr></thead><tbody id="r-cashiers"></tbody></table>
+  </div>
+  <h3 data-i18n="sales"></h3>
+  <table><thead><tr><th>№</th><th data-i18n="time"></th><th data-i18n="branch"></th><th data-i18n="cashier"></th><th data-i18n="method"></th><th class="r" data-i18n="sum"></th><th></th></tr></thead><tbody id="r-sales"></tbody></table>
+</main>
+
+<!-- SOZLAMALAR -->
+<main id="tab-settings" class="panel col hidden">
+  <h2 data-i18n="s_branches"></h2>
+  <form id="bform" class="form">
+    <input type="hidden" id="b-id">
+    <label class="f"><span data-i18n="p_name"></span><input id="b-name" required></label>
+    <label class="f"><span data-i18n="b_addr"></span><input id="b-addr"></label>
+    <label class="f"><span data-i18n="b_phone"></span><input id="b-phone"></label>
+    <label class="f"><span data-i18n="b_printer"></span><input id="b-printer" list="printers-dl"></label>
+    <label class="chk"><input type="checkbox" id="b-active" checked> <span data-i18n="active"></span></label>
+    <div class="row">
+      <button class="primary" type="submit" data-i18n="save"></button>
+      <button class="ghost" type="button" id="b-reset" data-i18n="cancel"></button>
+    </div>
+  </form>
+  <datalist id="printers-dl"></datalist>
+  <table><thead><tr><th data-i18n="p_name"></th><th data-i18n="b_addr"></th><th data-i18n="b_phone"></th><th data-i18n="s_printer"></th><th data-i18n="active"></th><th></th></tr></thead><tbody id="b-body"></tbody></table>
+
+  <h2 data-i18n="s_users"></h2>
+  <form id="uform" class="form">
+    <input type="hidden" id="u-id">
+    <label class="f"><span data-i18n="username"></span><input id="u-login" required autocomplete="off"></label>
+    <label class="f"><span data-i18n="full_name"></span><input id="u-full" required></label>
+    <label class="f"><span data-i18n="u_role"></span><select id="u-role"></select></label>
+    <label class="f" id="u-branch-wrap"><span data-i18n="branch"></span><select id="u-branch"></select></label>
+    <label class="f" id="u-limit-wrap"><span data-i18n="u_limit"></span><input id="u-limit" type="number" min="0" max="100" value="10"></label>
+    <label class="f"><span data-i18n="u_pass"></span><input id="u-pass" type="password" autocomplete="new-password"></label>
+    <label class="chk"><input type="checkbox" id="u-active" checked> <span data-i18n="active"></span></label>
+    <div class="row">
+      <button class="primary" type="submit" data-i18n="save"></button>
+      <button class="ghost" type="button" id="u-reset" data-i18n="cancel"></button>
+    </div>
+  </form>
+  <table><thead><tr><th data-i18n="username"></th><th data-i18n="full_name"></th><th data-i18n="u_role"></th><th data-i18n="branch"></th><th class="r" data-i18n="u_limit"></th><th data-i18n="active"></th><th></th></tr></thead><tbody id="u-body"></tbody></table>
+
+  <h2 data-i18n="s_cats"></h2>
+  <form id="cform" class="row">
+    <input id="c-name" data-i18n-ph="add_cat" required>
+    <button class="primary" type="submit" data-i18n="save"></button>
+  </form>
+  <div id="c-list" class="tags"></div>
+
+  <h2 data-i18n="s_printer"></h2>
+  <div class="row">
+    <button class="ghost" id="load-printers" type="button" data-i18n="load_printers"></button>
+    <button class="ghost" id="test-print" type="button" data-i18n="test_print"></button>
+  </div>
+  <p id="printer-list" class="mute"></p>
+</main>
+</div>
+
+<!-- Modal: son kiritish -->
+<div id="modal" class="overlay hidden">
+  <div class="dialog">
+    <h3 id="modal-title"></h3>
+    <input id="modal-input" inputmode="decimal" autocomplete="off">
+    <div class="row">
+      <button id="modal-ok" class="primary" data-i18n="ok"></button>
+      <button id="modal-cancel" class="ghost" data-i18n="cancel"></button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: kamera -->
+<div id="cam-modal" class="overlay hidden">
+  <div class="dialog cam">
+    <video id="cam-video" playsinline muted></video>
+    <p class="mute" data-i18n="cam_hint"></p>
+    <button id="cam-close" class="ghost" data-i18n="close"></button>
+  </div>
+</div>
+
+<div id="toast"></div>
+<div id="receipt"></div>
+<script src="/static/i18n.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>

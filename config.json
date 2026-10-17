@@ -1,0 +1,13 @@
+{
+  "printer_name": "",
+  "width": 32,
+  "shop_name": "DO'KON",
+  "address": "",
+  "phone": "",
+  "footer": "Xaridingiz uchun rahmat!",
+  "qr_url": "https://t.me/your_channel",
+  "barcode": true,
+  "cut": true,
+  "open_drawer": false,
+  "codepage": 17
+}
